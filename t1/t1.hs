@@ -95,7 +95,10 @@ func s = map (func2) s
 func2 :: String -> String
 func2 n = take 10 (n ++ "..........")
 
-
+-- Meu historico do ghci esta vazio
+-- Windows 10
+-- The Glorious Glasgow Haskell Compilation System, version 8.6.3
+-- C:\Users\bruno\AppData\Roaming\ghc
 
 
 
