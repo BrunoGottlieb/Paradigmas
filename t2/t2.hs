@@ -49,6 +49,14 @@ gen3Circles n r x
     | x == 1 = [((x*100,y*100),r) | x <- [2.3, 4.3..(fromIntegral(n)*2)], y <- [1.5, 3.5]]
     | x == 2 = [((x*100,y*100),r) | x <- [2.6, 4.6..(fromIntegral(n)*2)], y <- [1.0, 3.0]]
 
+genSenoide :: Int -> Float -> [Circle] -- Usado no caso 4
+genSenoide n h = [((margem_x + x*10, pos_y + h * cos((graus + x*10) * rad)), r) | x <- [1.0,4.0..fromIntegral(n)]]
+  where r = 20 -- tamanho do raio dos círculos
+        graus = fromIntegral(360) / fromIntegral(n) -- deslocamento dos circulos
+        rad = pi / fromIntegral(180) -- divisão para obter angulo em radianos
+        pos_y = 200
+        margem_x = 100
+
 genCirclesExtra :: Int -> Float -> Int -> [Circle] --Usado no caso 5
 genCirclesExtra c r i
     | i == 0 = [((x*100,y*100),r) | x <- [1.0,2.0..fromIntegral(n)], y <- [1.0,2.0..fromIntegral(c)]]
@@ -125,6 +133,17 @@ case3 = do
         ncircles = 6 --Numero de figuras
         r_circle = 50 --Raio das figuras
         (w,h) = (1500,700) -- width,height da imagem SVG
+
+case4 :: IO ()
+case4 = do
+  writeFile "case4.svg" $ svgstrs
+  where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
+        svgfigs = svgElements svgCircle circles (map svgStyle palette)
+        circles = genSenoide nCircles amplitude
+        palette = palette2 nCircles
+        nCircles = 80 -- numero de circulos
+        amplitude = 80 -- amplitude da onda
+        (w,h) = (1500,500) -- width,height da imagem SVG
 
 case5 :: IO ()
 case5 = do
