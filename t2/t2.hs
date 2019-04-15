@@ -61,6 +61,7 @@ genCirclesExtra :: Int -> Float -> Int -> [Circle] --Usado no caso 5
 genCirclesExtra c r i
     | i == 0 = [((x*100,y*100),r) | x <- [1.0,2.0..fromIntegral(n)], y <- [1.0,2.0..fromIntegral(c)]]
     | i == 1 = [((x*100,y*100),r) | x <- [1.5, 2.5..fromIntegral(c-1)], y <- [1.5, 2.5..fromIntegral(c-1)]]
+    | i == 2 = [((500 + x*100,y*100-50),r) | x <- [1.5, 2.5..fromIntegral(c-1)], y <- [1.5, 2.5..fromIntegral(c-1)]]
     where n = c * c
 -------------------------------------------------------------------------------
 -- Strings SVG
@@ -124,9 +125,9 @@ case3 :: IO ()
 case3 = do
   writeFile "case3.svg" $ svgstrs
   where svgstrs = svgBegin w h ++ circfigs ++ circfigs2 ++ circfigs3 ++ svgEnd
-        circfigs = svgElements svgCircle (gen3Circles ncircles (r_circle-1) 0) (map svgStyle red)
-        circfigs2 = svgElements svgCircle (gen3Circles ncircles (r_circle-1) 1) (map svgStyle green)
-        circfigs3 = svgElements svgCircle (gen3Circles ncircles (r_circle-1) 2) (map svgStyle blue)
+        circfigs = svgElements svgCircle (gen3Circles ncircles (r_circle) 0) (map svgStyle red)
+        circfigs2 = svgElements svgCircle (gen3Circles ncircles (r_circle) 1) (map svgStyle green)
+        circfigs3 = svgElements svgCircle (gen3Circles ncircles (r_circle) 2) (map svgStyle blue)
         red = mixPalette (ncircles-1) 0
         green = mixPalette (ncircles-1) 1
         blue = mixPalette (ncircles-1) 2
@@ -145,14 +146,16 @@ case4 = do
         amplitude = 80 -- amplitude da onda
         (w,h) = (1500,500) -- width,height da imagem SVG
 
-case5 :: IO ()
+case5 :: IO () -- Atividade extra que fiz
 case5 = do
   writeFile "case5.svg" $ svgstrs
-  where svgstrs = svgBegin w h ++ circfigs ++ circfigs2 ++ svgEnd
-        circfigs = svgElements svgCircle (genCirclesExtra ncolunas (r_circle-1) 0) (map svgStyle red)
-        circfigs2 = svgElements svgCircle (genCirclesExtra ncolunas (r_circle-1) 1) (map svgStyle green)
+  where svgstrs = svgBegin w h ++ circfigs ++ circfigs2 ++ circfigs3 ++ svgEnd
+        circfigs = svgElements svgCircle (genCirclesExtra ncolunas (r_circle) 0) (map svgStyle red)
+        circfigs2 = svgElements svgCircle (genCirclesExtra ncolunas (r_circle) 1) (map svgStyle green)
+        circfigs3 = svgElements svgCircle (genCirclesExtra (ncolunas+1) (r_circle) 2) (map svgStyle extra)
         red = mixPalette (ncolunas*ncolunas-1) 0
         green = mixPalette (ncolunas*ncolunas-1) 1
+        extra = palette2 (ncolunas*ncolunas)
         ncolunas = 5 --Numero de colunas dos circulos
         r_circle = 50 --Raio das figuras
         (w,h) = (1500,700) -- width,height da imagem SVG
