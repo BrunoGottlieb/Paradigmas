@@ -44,3 +44,10 @@ nRandoms(N,[H|T]) :-
 	N > 0,
 	N2 is N-1,
 	nRandoms(N2,T).
+
+%9. Defina um predicado recursivo potN0(N,L), de forma que L seja uma lista de potências de 2, com expoentes de N a 0
+potN0(0,[1]).
+potN0(N,[H|T]) :-
+	N2 is N-1,
+	pow(2,N,H),
+	potN0(N2, T).
