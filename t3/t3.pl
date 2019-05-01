@@ -5,7 +5,7 @@ odd(X) :- 1 is mod(X, 2).
 
 %2. Defina um predicado recursivo hasN(L,N) que seja verdadeiro se L for uma lista de N elementos
 hasN([], 0).
-hasN([H|T], N) :- hasN(T,X), N is X+1.
+hasN([_|T], N) :- hasN(T,X), N is X+1.
 
 %3. Defina um predicado recursivo inc99(L1,L2), de forma que L2 seja uma lista com todos os elementos de L1 acrescidos da constante 99
 inc99([],[]).
@@ -26,8 +26,13 @@ comment([H|T],[H2|T2]) :-
 	comment(T,T2).
 
 %6. Defina um predicado recursivo onlyEven(L1,L2), de forma que L2 seja uma lista só com os elementos pares de L1
-%onlyEven([],[]).
-%onlyEven([H|T],[H2|T2]) :-
+onlyEven([],[]).
+onlyEven([H|T],[H|T2]) :-
+	0 is mod(H,2),
+	onlyEven(T,T2).
+onlyEven([H|T],L) :-
+	1 is mod(H,2),
+	onlyEven(T,L).
 	
 %7. Defina um predicado recursivo countdown(N,L), de forma que L seja uma lista com os números [N, N-1, N-2, .., 1], sendo N um número positivo
 countdown(0,[]).
@@ -59,13 +64,14 @@ zipmult([H|T],[H1|T1],[H2|T2]) :-
 	zipmult(T,T1,T2).
 
 %11. Defina um predicado recursivo potencias(N,L), de forma que L seja uma lista com as N primeiras potências de 2, sendo a primeira 2^0 e assim por diante
-%potencias(0,[1]).
-%potencias(N,[H|T]) :-
-%	N2 is N-1,
-%	N2 > 0,
-%	X is X+1,
-%	pow(2,X,H),
-%	potencias(N2, T).
+potencias(0,[]).
+potencias(N,[H|T]) :- potencias2(N,N,[H|T]).
+potencias2(_,0,[]).
+potencias2(N,N2,[H|T]) :- 
+	Y is N-N2,
+	pow(2,Y,H),
+	X is N2-1,
+	potencias2(N,X,T).
 
 %12. Defina um predicao recursivo cedulas(V,L1,L2), que receba um valor V e uma lista L1 de cédulas com valores em Reais (R$),
 %em ordem decrescente, e obtenha a lista L2 decompondo o valor V em 0 ou mais cédulas de cada tipo
