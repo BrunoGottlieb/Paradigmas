@@ -24,3 +24,15 @@ comment([],[]).
 comment([H|T],[H2|T2]) :-
 	string_concat(H,"%%",H2),
 	comment(T,T2).
+
+%6. Defina um predicado recursivo onlyEven(L1,L2), de forma que L2 seja uma lista só com os elementos pares de L1
+%onlyEven([],[]).
+%onlyEven([H|T],[H2|T2]) :-
+	
+%7. Defina um predicado recursivo countdown(N,L), de forma que L seja uma lista com os números [N, N-1, N-2, .., 1], sendo N um número positivo
+countdown(0,[]).
+countdown(N,[H|T]) :-
+	N >= 0,
+	H is N,
+	N2 is H-1,
+	countdown(N2,T).
