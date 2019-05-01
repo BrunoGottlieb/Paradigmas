@@ -36,3 +36,11 @@ countdown(N,[H|T]) :-
 	H is N,
 	N2 is H-1,
 	countdown(N2,T).
+
+%8. Defina um predicado recursivo nRandoms(N,L), de forma que L seja uma lista com N números gerados aleatoriamente
+nRandoms(0,[]).
+nRandoms(N,[H|T]) :-
+	random(0,100,H),
+	N > 0,
+	N2 is N-1,
+	nRandoms(N2,T).
