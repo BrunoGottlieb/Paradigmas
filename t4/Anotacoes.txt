@@ -1,0 +1,75 @@
+inspetor Hercule Poirot
+Vitima: Anita
+
+crime ocorreu na quinta-feira ou sexta-feira
+apenas um assassino
+três possíveis motivos: dinheiro, ciúme ou insanidade
+
+Armas do crime:
+O bastão de baseball que foi roubado do amigo pobre de Anita, Bernardo, na quinta-feira em Porto Alegre ou na quarta-feira em Santa Maria
+O martelo que foi roubado da caixa de ferramentas do apartamento na quarta ou na quinta-feira.
+
+O assassino entrou no quarto de Anita utilizando a chave que roubou dela.
+
+Chave foi roubada: quarta em SM
+                   terça em POA
+
+Bastao foi roubado: quinta-feira em POA
+                    quarta em SM
+
+Martelo foi roubado: quarta-feira ou quinta-feira
+
+vitima(anita).
+
+assassino(X).
+
+insano(adriano).
+insano(maria).
+
+
+dinheiro(alice, rico).
+dinheiro(henrique, rico).
+dinheiro(adriano, rico).
+dinheiro(caren, rico).
+dinheiro(bia, pobre).
+dinheiro(pedro, pobre).
+dinheiro(maria, pobre).
+dinheiro(bernardo, pobre).
+
+motivo_dinheiro(X, pobre) :- dinheiro(X, pobre).
+
+relacionamento(anita, bernardo).
+relacionamento(bernardo, caren).
+relacionamento(anita, pedro).
+relacionamento(pedro, alice).
+relacionamento(alice, henrique).
+relacionamento(henrique, maria).
+relacionamento(maria, adriano).
+relacionamento(adriano, caren).
+
+Pedro: SM na segunda, na terça e na quinta-feira
+Pedro: Poa na quarta
+Caren: Poa segunda até quarta
+Caren: SM na quinta e na sexta
+Henrique: SM na segunda
+Henrique: Poa na terça
+Bia: SM na segunda-feira e na quinta
+Bia: Poa terça e quarta
+Alice: Poa terça e quarta
+Alice: SM na segunda, quinta e sexta
+Bernardo: SM segunda, terça e quinta
+Bernardo: Poa na quarta
+Maria: SM de terça a quinta
+
+Pedro: quinta em diante
+Caren: sexta
+Henrique: segunda, terça em diante
+Bia: sexta
+Adriano: semana toda menos quarta
+Alice: segunda, quinta e sexta
+Bernardo: sexta
+Maria: segunda e sexta
+
+Bastao de baseball: Maria
+Martelo: Pedro, Henrique, Adriano, Alice
+Chave: Maria, Caren, Henrique, Bia, Alice
