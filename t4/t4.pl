@@ -41,7 +41,7 @@ bastao(X) :- portoAlegre(X, quinta) ; santaMaria(X, quarta).
 
 martelo(X) :- apartamento(X, quarta) ; apartamento(X, quinta).
 
-chave(X) :- santaMaria(X, quarta) ; portoAlegre(X, terca).
+chave(X) :- santaMaria(X, segunda) ; portoAlegre(X, terca).
 
 arma(X) :- bastao(X) ; martelo(X).
 
