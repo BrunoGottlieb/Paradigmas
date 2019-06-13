@@ -1,10 +1,13 @@
 import java.util.*;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.lang.Boolean;
 
-class MainFile{
+class RandomPickerCmd{
     public static void main(String[] args) {
-        OnlineRandom demoPost = new OnlineRandom();
-        OfflineRandom off = new OfflineRandom();
         Scanner lerEscolha = new Scanner(System.in);
         int metodoEmbaralhamento = 0;
 
@@ -18,20 +21,57 @@ class MainFile{
 
         ReadFile r = new ReadFile();
         r.openFile(args[0]);
-        System.out.println("\nConteudo comecara a ser exibido:\n");
+        System.out.println("\nConteudo obtido do arquivo:\n");
         r.readFile();
         r.closeFile();
         System.out.println("\nTerminou de exibir\n");
         System.out.println("\nIniciando embaralhamento:\n");
+
+
+        /*System.out.println("\nChecking internet connection:\n");
+        boolean vamosver = isInternetAvailable();
+        if(vamosver)
+            System.out.println("Voce tem internet!");
+            else System.out.println("Voce NAO tem internet!");*/
+
+        int tam = 0;
+        for(int i=0; r.vetor[i] != null; i++)
+            tam++;
+
+        String[] clone = new String[tam];
+        for(int i=0; r.vetor[i] != null; i++)
+            clone[i] = r.vetor[i];
         switch(metodoEmbaralhamento){
             case 0:
-                off.randMeth(r.vetor); // Faz o embaralhamento offline
+                OfflineRandom.randMeth(clone); // Faz o embaralhamento offline
                 break;
             case 1:
-                demoPost.onlineRandom(r.vetor); // Faz o embaralhamento online
+                OnlineRandom.onlineRandom(clone); // Faz o embaralhamento online
                 break;
             default: System.out.println("Metodo escolhido eh invalido");
                 break;
         }
     }
+
+    public static boolean isInternetAvailable() throws IOException
+    {
+        return isHostAvailable("google.com") || isHostAvailable("amazon.com")
+                || isHostAvailable("facebook.com")|| isHostAvailable("apple.com");
+    }
+
+    /*private static boolean isHostAvailable(String hostName) throws IOException
+    {
+        try(Socket socket = new Socket())
+        {
+            int port = 80;
+            InetSocketAddress socketAddress = new InetSocketAddress(hostName, port);
+            socket.connect(socketAddress, 3000);
+
+            return true;
+        }
+        catch(UnknownHostException unknownHost)
+        {
+            return false;
+        }
+    }*/
 }

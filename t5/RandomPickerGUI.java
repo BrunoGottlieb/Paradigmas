@@ -20,6 +20,8 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import java.util.List;
 import java.io.File;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 // Exemplo em JavaFX com tratamento de evento associado a um objeto da classe Button
 // Ver mais sobre classes anonimas em:
@@ -27,11 +29,18 @@ import java.io.File;
 
 
 public class RandomPickerGUI extends Application {
+
+    public String[] rows = new String[10];
+
    public static void main(String[] args) {
       launch(args);
    }
    public void start(Stage stage){
        stage.setTitle("Illuminati");
+       VBox vbox = new VBox();
+       vbox.setSpacing(10);
+       vbox.setAlignment(Pos.CENTER);
+
        TextArea textArea = new TextArea();
        final Menu fileMenu = new Menu("File");
        final Menu optionsMenu = new Menu("Options");
@@ -46,6 +55,9 @@ public class RandomPickerGUI extends Application {
 
        MenuBar menuBar = new MenuBar();
        menuBar.getMenus().addAll(fileMenu, optionsMenu);
+
+       Button shuffleButton = new Button("Shuffle");
+       //shuffleButton.
 
 // ----------------------------- Acoes de botoes
 
@@ -75,9 +87,21 @@ public class RandomPickerGUI extends Application {
               fileChooser.showOpenDialog(stage);
           }
       });
-// ---------------------------------------------------------------
 
-      stage.setScene(new Scene(menuBar, 300, 250));
+      shuffleButton.setOnAction(new EventHandler<ActionEvent>() {
+         public void handle(ActionEvent event) {
+             rows = textArea.getText().split("\n");
+             //System.out.println("Nomes obtidos:");
+             /*for(int i=0; rows[i] != null; i++)
+                System.out.println(rows[i]);*/
+            //OfflineRandom.randMeth(rows);
+            String[] tmp = rows.clone();
+            Platform.runLater(() -> OfflineRandom.randMeth(tmp));
+        }
+    });
+// ---------------------------------------------------------------
+      vbox.getChildren().addAll(menuBar, textArea, shuffleButton);
+      stage.setScene(new Scene(vbox, 300, 275));
       stage.show();
    }
 

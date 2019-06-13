@@ -3,15 +3,19 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class OfflineRandom{
 
-    ExibirResposta resp = new ExibirResposta();
-    int tam = 0;
+    RandomPickerGUI seila = new RandomPickerGUI();
 
-    public void randMeth(String[] array){
+    public static void randMeth(String[] array){
+        int tam = 0;
+
         Random random = new Random();
 
-        for(int i=0; array[i] != null; i++) tam++;
+        for(int i=0; i<array.length; i++)
+            System.out.println(array[i]);
 
-        for(int i=0; array[i] != null; i++) // Embaralha o vetor
+        for(int i=0; i<array.length; i++) tam++;
+
+        for(int i=0; i<array.length; i++) // Embaralha o vetor
         {
             String temp = array[i];
             int randomIndex = random.nextInt(tam);
@@ -19,7 +23,11 @@ public class OfflineRandom{
             array[randomIndex] = temp;
         }
 
-        resp.respFunc(array);
+        ExibirResposta.respMeth(array);
+    }
+
+    public void testeSecreto(){
+        System.out.println("Tamanho do vetor: " + seila.rows.length);
     }
 
 }
