@@ -3,9 +3,11 @@ import java.io.*;
 
 public class OnlineRandom{
 
-  public static void onlineRandom(String[] args) {
+    public static int Interface;
 
-      String[] resposta = new String[10];
+    public static void onlineRandom(String[] args) {
+
+      String[] resposta = new String[50];
 
   	try {
       String urlstr = "https://www.random.org/lists/?mode=advanced";
@@ -47,7 +49,9 @@ public class OnlineRandom{
       for(i=0; resposta[i] != null; i++)
           clone[i] = resposta[i];
       // Mostra resposta
-      ExibirResposta.respMeth(clone);
+      if(Interface == 0)
+          ExibirResposta.respMeth(clone);
+      else RandomPickerGUI.SetRows(clone);
 
       in.close();
     } catch (IOException e) {

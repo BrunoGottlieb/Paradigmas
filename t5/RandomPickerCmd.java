@@ -8,16 +8,11 @@ import java.lang.Boolean;
 
 class RandomPickerCmd{
     public static void main(String[] args) {
+        OfflineRandom.Interface = 0;
+        OnlineRandom.Interface = 0;
+
         Scanner lerEscolha = new Scanner(System.in);
         int metodoEmbaralhamento = 0;
-
-        System.out.println("\n\nNome do arquivo a ser aberto: " + args[0]);
-        System.out.println("\n\nEscolha o metodo de embaralhamento:");
-        System.out.println("[0] Offline");
-        System.out.println("[1] Online");
-
-        int escolha = lerEscolha.nextInt();
-        metodoEmbaralhamento = escolha;
 
         ReadFile r = new ReadFile();
         r.openFile(args[0]);
@@ -27,13 +22,6 @@ class RandomPickerCmd{
         System.out.println("\nTerminou de exibir\n");
         System.out.println("\nIniciando embaralhamento:\n");
 
-
-        /*System.out.println("\nChecking internet connection:\n");
-        boolean vamosver = isInternetAvailable();
-        if(vamosver)
-            System.out.println("Voce tem internet!");
-            else System.out.println("Voce NAO tem internet!");*/
-
         int tam = 0;
         for(int i=0; r.vetor[i] != null; i++)
             tam++;
@@ -41,37 +29,21 @@ class RandomPickerCmd{
         String[] clone = new String[tam];
         for(int i=0; r.vetor[i] != null; i++)
             clone[i] = r.vetor[i];
-        switch(metodoEmbaralhamento){
-            case 0:
-                OfflineRandom.randMeth(clone); // Faz o embaralhamento offline
+
+        if(clone.length < 2){
+            System.out.println("\nA lista deve possuir ao menos 2 nomes\n");
+            return;
+        }
+        System.out.println("\nTeste de conexao sera executado, aguarde um instante...\n");
+        try{
+            switch(CheckInternetConnection.check()){ // Confere se tem internet
+                case 0: OfflineRandom.randMeth(clone); // Faz o embaralhamento offline
                 break;
-            case 1:
-                OnlineRandom.onlineRandom(clone); // Faz o embaralhamento online
+                case 1: OnlineRandom.onlineRandom(clone); // Faz o embaralhamento online
                 break;
-            default: System.out.println("Metodo escolhido eh invalido");
-                break;
+            }
+        }catch(Exception erro){
+             return;
         }
     }
-
-    public static boolean isInternetAvailable() throws IOException
-    {
-        return isHostAvailable("google.com") || isHostAvailable("amazon.com")
-                || isHostAvailable("facebook.com")|| isHostAvailable("apple.com");
-    }
-
-    /*private static boolean isHostAvailable(String hostName) throws IOException
-    {
-        try(Socket socket = new Socket())
-        {
-            int port = 80;
-            InetSocketAddress socketAddress = new InetSocketAddress(hostName, port);
-            socket.connect(socketAddress, 3000);
-
-            return true;
-        }
-        catch(UnknownHostException unknownHost)
-        {
-            return false;
-        }
-    }*/
 }

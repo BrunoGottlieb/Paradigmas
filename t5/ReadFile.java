@@ -1,16 +1,19 @@
 import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
 
 public class ReadFile{
-    public String[] vetor = new String[10];
+    public String[] vetor = new String[50];
     private Scanner x;
 
     public void openFile(String fileName){
         try{
-            String tmp = fileName;
-            tmp = tmp.concat(".txt");
-            x = new Scanner(new File(tmp));
+            if(fileName.contains(".txt"))
+                x = new Scanner(new File(fileName));
+            else{
+                String tmp = fileName;
+                tmp = tmp.concat(".txt");
+                x = new Scanner(new File(tmp));
+            }
         }
         catch(Exception e){
             System.out.println("could not find file");
@@ -27,10 +30,8 @@ public class ReadFile{
         int i = 0;
         while(x.hasNext()){
             String a = x.next();
-            String b = x.next();
-            String c = x.next();
 
-            System.out.printf("%s %s %s\n", a,b,c);
+            System.out.printf("%s\n", a);
 
             vetor[i] = a;
             i++;

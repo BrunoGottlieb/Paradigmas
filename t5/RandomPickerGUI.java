@@ -22,6 +22,8 @@ import java.util.List;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import javafx.scene.control.Button;
+import java.io.*;
 
 // Exemplo em JavaFX com tratamento de evento associado a um objeto da classe Button
 // Ver mais sobre classes anonimas em:
@@ -30,12 +32,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomPickerGUI extends Application {
 
-    public String[] rows = new String[10];
+    public String[] rows = new String[50];
+    private static String[] resultado;
+    private int aux = 1;
+
+    public static Label lbl = new Label("");
+    public static Button nextButton = new Button("Next");
+
+    private Scanner x;
 
    public static void main(String[] args) {
       launch(args);
    }
    public void start(Stage stage){
+       OfflineRandom.Interface = 1;
+       OnlineRandom.Interface = 1;
+
        stage.setTitle("Illuminati");
        VBox vbox = new VBox();
        vbox.setSpacing(10);
@@ -57,7 +69,8 @@ public class RandomPickerGUI extends Application {
        menuBar.getMenus().addAll(fileMenu, optionsMenu);
 
        Button shuffleButton = new Button("Shuffle");
-       //shuffleButton.
+       nextButton.setVisible(false);
+
 
 // ----------------------------- Acoes de botoes
 
@@ -83,26 +96,64 @@ public class RandomPickerGUI extends Application {
        subMenuOpen.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent event) {
               FileChooser fileChooser = new FileChooser();
-              fileChooser.setTitle("Open Resource File");
-              fileChooser.showOpenDialog(stage);
+              fileChooser.setTitle("Escolha o arquivo desejado");
+              File file = fileChooser.showOpenDialog(stage);
+              String tmp = "";
+              if(file != null){
+                  try{
+                      x = new Scanner(new File(file.getAbsolutePath()));
+                  }
+                  catch(Exception e){
+                      System.out.println("could not find file");
+                  }
+                  while(x.hasNext())
+                      tmp = tmp.concat(x.next()+"\n");
+                  textArea.setText(tmp);
+              }
           }
       });
 
       shuffleButton.setOnAction(new EventHandler<ActionEvent>() {
          public void handle(ActionEvent event) {
              rows = textArea.getText().split("\n");
-             //System.out.println("Nomes obtidos:");
-             /*for(int i=0; rows[i] != null; i++)
-                System.out.println(rows[i]);*/
-            //OfflineRandom.randMeth(rows);
-            String[] tmp = rows.clone();
-            Platform.runLater(() -> OfflineRandom.randMeth(tmp));
+             String[] tmp = rows.clone();
+             aux = 1;
+             if(tmp.length < 2){
+                 System.out.println("\nA lista deve possuir ao menos 2 nomes\n");
+                 return;
+             }
+             System.out.println("\nTeste de conexao sera executado, aguarde um instante...\n");
+             try{
+                 switch(CheckInternetConnection.check()){
+                     case 0: Platform.runLater(() -> OfflineRandom.randMeth(tmp));
+                     break;
+                     case 1: Platform.runLater(() -> OnlineRandom.onlineRandom(tmp));
+                     break;
+                 }
+             }catch(Exception erro){
+          	      return;
+             }
+
         }
     });
+
+    nextButton.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+            lbl.setText(resultado[aux]); aux++;
+            if(aux == resultado.length)
+                nextButton.setVisible(false);
+		}
+	});
 // ---------------------------------------------------------------
-      vbox.getChildren().addAll(menuBar, textArea, shuffleButton);
+      vbox.getChildren().addAll(menuBar, textArea, shuffleButton, lbl, nextButton);
       stage.setScene(new Scene(vbox, 300, 275));
       stage.show();
+   }
+
+   public static void SetRows(String[] string){
+       resultado = string.clone();
+       nextButton.setVisible(true);
+       lbl.setText(resultado[0]);
    }
 
 }

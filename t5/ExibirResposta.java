@@ -1,5 +1,7 @@
 public class ExibirResposta{
 
+    RandomPickerGUI gui = new RandomPickerGUI();
+
     public static void respMeth(String[] resposta){
         int i = 0;
         int tam = resposta.length;

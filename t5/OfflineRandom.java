@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class OfflineRandom{
 
-    RandomPickerGUI seila = new RandomPickerGUI();
+    public static int Interface;
 
     public static void randMeth(String[] array){
         int tam = 0;
@@ -22,12 +22,8 @@ public class OfflineRandom{
             array[i] = array[randomIndex];
             array[randomIndex] = temp;
         }
-
-        ExibirResposta.respMeth(array);
+        if(Interface == 0)
+            ExibirResposta.respMeth(array);
+        else RandomPickerGUI.SetRows(array);
     }
-
-    public void testeSecreto(){
-        System.out.println("Tamanho do vetor: " + seila.rows.length);
-    }
-
 }
