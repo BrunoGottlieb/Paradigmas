@@ -8,8 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.TextField;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
@@ -26,7 +31,7 @@ public class Buttons{
 
     public static void reload(){
         System.out.println("\nUm novo arquivo sera baixado. Aguarde um momento.");
-        OnlineDownload.download(T6Main.onlineURL);
+        OnlineDownload.download(EnadeUFSMExplorer.onlineURL);
     }
 
     public static void about(){
@@ -43,6 +48,27 @@ public class Buttons{
         janelinha.setY(100);
         janelinha.show();
     }
+
+    /*public static void selectLine(TableView table, ObservableList<DataEntry> data){
+        int selectedIndex = table.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0 && selectedIndex < data.size()) {
+           System.out.println("Removing "+selectedIndex);
+           data.remove(selectedIndex);
+        } else {
+          System.out.println("Selected:"+selectedIndex);
+        }
+    }*/
+
+    /*Button btnDel = new Button("Del");
+    btnDel.setOnAction(ev -> {
+      int selectedIndex = table.getSelectionModel().getSelectedIndex();
+      if (selectedIndex >= 0 && selectedIndex < data.size()) {
+         System.out.println("Removing "+selectedIndex);
+         data.remove(selectedIndex);
+      } else {
+        System.out.println("Selected:"+selectedIndex);
+      }
+  });*/
 
     public static void source(){
         Label aboutText = new Label("Insira a URL desejada:");
@@ -65,7 +91,7 @@ public class Buttons{
 
         confirmButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                T6Main.onlineURL = textField.getText();
+                EnadeUFSMExplorer.onlineURL = textField.getText();
                 System.out.println("URL alterada para: " + textField.getText());
             }
         });
