@@ -14,24 +14,28 @@ import com.google.gson.JsonParser;
 
 public class DemoParseGithubWithGson extends Thread {
 	
-	public void run(){
+	public static int maiorNumCommits = 0;
+	public static String maiorRepos;
+	public static int menorNumCommits = 999;
+	public static String menorRepos;
+
+	public void start(String s) {
+		run(s);
+	}
+
+	public void run(String a){
 		System.out.println("Github Getter running");
 		try {
-			gitHubWithGson();
+			gitHubWithGson(a);		
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Thread nao pode iniciar");
 		}
 	}
-	
-	public static void gitHubWithGson() throws IOException {
 
-		//String urlstr = "https://api.github.com/repos/google/gson/commits?page=2";
-		String urlstr = "https://api.github.com/repos/google/gson/commits";
+	public static void gitHubWithGson(String urlRecebida) throws IOException {
 
-		/*if (args.length >= 1) {
-			urlstr = args[0];
-		}*/
+		String urlstr = urlRecebida;
 
 		URL url = new URL(urlstr);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -49,41 +53,62 @@ public class DemoParseGithubWithGson extends Thread {
 		JsonParser parser = new JsonParser();
 		JsonArray results = parser.parse(in.readLine()).getAsJsonArray();
 		System.out.println("Size: "+ results.size());
-		
+
 		JsonElement date = null;
 		JsonElement message = null;
 
-		ArrayList<Data> tmp = new ArrayList<>();
-		
+		Integer tamMedioMensagens = 0;
+		Integer numCommits = 0;
+
+		ArrayList<CommitData> tmp = new ArrayList<>();
+
 		for (JsonElement e : results) {
 			date = e
-			          .getAsJsonObject().get("commit")
-			          .getAsJsonObject().get("author")
-			          .getAsJsonObject().get("date");
-			
+					.getAsJsonObject().get("commit")
+					.getAsJsonObject().get("author")
+					.getAsJsonObject().get("date");
+
 			message = e
-			          .getAsJsonObject().get("commit")
-			          .getAsJsonObject().get("message");
-			
-			Data c = new Data(date, message);
-			
+					.getAsJsonObject().get("commit")
+					.getAsJsonObject().get("message");
+
+			CommitData c = new CommitData(date, message);
+
+			numCommits++;
+			tamMedioMensagens += message.toString().length();
+
 			tmp.add(c);
 
 			System.out.println("Data: " + date);
 			System.out.println("Message: " + message);
-		    }   
+		}   
 
+		GitHubAnalyzerGUI.data.add(new TableData(urlstr, numCommits.toString(), ((Integer)(tamMedioMensagens/numCommits)).toString()));
+		conferirRecordes(numCommits, urlstr);
+		
 		System.out.println("Everything was ok.");
 		in.close();
+	}
+	
+	public static void conferirRecordes(int n, String s) {
+		if(n > maiorNumCommits) {
+			maiorNumCommits = n;
+			maiorRepos = s;
+		}	
+		if(n < menorNumCommits) {
+			menorNumCommits = n;
+			menorRepos = s;
+		}
+			
 	}
 
 }
 
-class Data {
+class CommitData {
 	private JsonElement date;
 	private JsonElement message;
 
-	public Data(JsonElement date, JsonElement message) {
+	public CommitData(JsonElement date, JsonElement message) {
 		this.date = date;
 		this.message = message;		
 	}
