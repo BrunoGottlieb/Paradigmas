@@ -1,6 +1,8 @@
 package application;
 	
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -29,11 +32,17 @@ public class Main extends Application {
 	
 	ArrayList<String> urlList = new ArrayList<String>();
 	
+	ListView<String> listView;
+	
 	//@Override
 	public void start(Stage stage) {
+		
 		stage.setTitle("Illuminati");
 
 		// ---------------------------------- Menus
+		
+		listView = new ListView<>();
+		//listView.getItems().addAll(urlList.get(0), urlList.get(1));
 
 		final Menu fileMenu = new Menu("File");
 		final Menu toolsMenu = new Menu("Tools");
@@ -56,7 +65,7 @@ public class Main extends Application {
 		VBox vbox = new VBox();
 		vbox.setSpacing(5);
 		vbox.setAlignment(Pos.TOP_CENTER);
-		vbox.getChildren().add(menuBar);
+		vbox.getChildren().addAll(menuBar, listView);
 
 		stage.setScene(new Scene(vbox,700,450));
 		stage.show();
@@ -87,16 +96,22 @@ public class Main extends Application {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Escolha o arquivo desejado");
 				File file = fileChooser.showOpenDialog(stage);
-				String tmp = "";
+				String line = null;
 				if(file != null){
 					try{
-						x = new Scanner(new File(file.getAbsolutePath()));
+						//x = new Scanner(new File(file.getAbsolutePath()));
+						BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+						while ((line = br.readLine()) != null)
+							urlList.add(line);
 					}
 					catch(Exception e){
 						System.out.println("could not find file");
 					}
-					while(x.hasNext())
-						urlList.add(tmp);
+					
+					for (String s : urlList)
+						listView.getItems().add(s);
+					
+					System.out.println("Leu os arquivos com sucesso");
 				}
 			}
 		});

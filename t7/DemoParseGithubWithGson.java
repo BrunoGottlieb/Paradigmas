@@ -54,6 +54,8 @@ public class DemoParseGithubWithGson extends Thread {
 		JsonElement date = null;
 		JsonElement message = null;
 
+		ArrayList<Data> tmp = new ArrayList<>();
+		
 		for (JsonElement e : results) {
 			date = e
 			          .getAsJsonObject().get("commit")
@@ -63,6 +65,10 @@ public class DemoParseGithubWithGson extends Thread {
 			message = e
 			          .getAsJsonObject().get("commit")
 			          .getAsJsonObject().get("message");
+			
+			Data c = new Data(date, message);
+			
+			tmp.add(c);
 
 			System.out.println("Data: " + date);
 			System.out.println("Message: " + message);
@@ -72,4 +78,14 @@ public class DemoParseGithubWithGson extends Thread {
 		in.close();
 	}
 
+}
+
+class Data {
+	private JsonElement date;
+	private JsonElement message;
+
+	public Data(JsonElement date, JsonElement message) {
+		this.date = date;
+		this.message = message;		
+	}
 }
