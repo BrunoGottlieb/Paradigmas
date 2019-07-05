@@ -9,16 +9,22 @@ import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -32,17 +38,41 @@ public class Main extends Application {
 	
 	ArrayList<String> urlList = new ArrayList<String>();
 	
-	ListView<String> listView;
+	//ListView<String> listView;
+	
+	TableView<TableData> table;
+	
+	private final ObservableList<TableData> data =
+		FXCollections.observableArrayList();
 	
 	//@Override
 	public void start(Stage stage) {
 		
-		stage.setTitle("Illuminati");
+		stage.setTitle("Commit Analyzer");
 
-		// ---------------------------------- Menus
+		// --------------------------------------- tabela
 		
-		listView = new ListView<>();
-		//listView.getItems().addAll(urlList.get(0), urlList.get(1));
+		//listView = new ListView<>();
+		table = new TableView<>();
+		
+		TableColumn repositorioColumn = new TableColumn("Repositorio");
+		repositorioColumn.setMinWidth(400);
+		repositorioColumn.setCellValueFactory(new PropertyValueFactory<TableData,String>("repositorio"));
+		
+		TableColumn<TableData, String> commitsColumn = new TableColumn<>("Numero Commits");
+		commitsColumn.setMinWidth(150);
+		commitsColumn.setCellValueFactory(new PropertyValueFactory<TableData,String>("numeroCommits"));
+		
+		TableColumn<TableData, String> tamMedioMessageColumn = new TableColumn<>("Tam Medio Mensagem");
+		tamMedioMessageColumn.setMinWidth(150);
+		tamMedioMessageColumn.setCellValueFactory(new PropertyValueFactory<TableData,String>("tamMessage"));
+		
+		
+		table.setItems(data);
+		table.getColumns().addAll(repositorioColumn, commitsColumn, tamMedioMessageColumn);
+		
+		
+		// -------------------------------------------- Menus
 
 		final Menu fileMenu = new Menu("File");
 		final Menu toolsMenu = new Menu("Tools");
@@ -65,13 +95,13 @@ public class Main extends Application {
 		VBox vbox = new VBox();
 		vbox.setSpacing(5);
 		vbox.setAlignment(Pos.TOP_CENTER);
-		vbox.getChildren().addAll(menuBar, listView);
+		vbox.getChildren().addAll(menuBar, table);
 
 		stage.setScene(new Scene(vbox,700,450));
 		stage.show();
 
-
-
+//----------------------------------------------------Botoes
+		
 		subMenuExit.setOnAction(e -> Platform.exit());
 
 		subMenuAbout.setOnAction(new EventHandler<ActionEvent>() {
@@ -99,7 +129,6 @@ public class Main extends Application {
 				String line = null;
 				if(file != null){
 					try{
-						//x = new Scanner(new File(file.getAbsolutePath()));
 						BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
 						while ((line = br.readLine()) != null)
 							urlList.add(line);
@@ -109,7 +138,7 @@ public class Main extends Application {
 					}
 					
 					for (String s : urlList)
-						listView.getItems().add(s);
+						data.add(new TableData(s,null,null));
 					
 					System.out.println("Leu os arquivos com sucesso");
 				}
@@ -119,8 +148,8 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		DemoParseGithubWithGson d = new DemoParseGithubWithGson();
-		d.start();
+		/*DemoParseGithubWithGson d = new DemoParseGithubWithGson();
+		d.start();*/
 		launch(args);
 	}
 }

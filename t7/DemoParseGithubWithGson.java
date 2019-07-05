@@ -19,7 +19,6 @@ public class DemoParseGithubWithGson extends Thread {
 		try {
 			gitHubWithGson();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Thread nao pode iniciar");
 		}
