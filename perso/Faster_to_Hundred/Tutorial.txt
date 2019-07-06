@@ -1,0 +1,30 @@
+Sobre:
+
+Esse projeto em C# foi desenvolvido com o auxílio da Unity3D como atividade personalizada para a disciplina de Paradigmas de Programação.
+Seu desenvolvimento abrange os seguintes conceitos de programação orientada a objeto:
+Modificadores de acesso
+Encapsulamento
+Polimorfismo
+Getters
+Setters
+Classes
+
+Requisitos:
+
+Android 4.1 ou superior
+Link para download(Google Drive): https://drive.google.com/open?id=1gZIQtxniyibIh16BQk8rg5YTuNYDGYZc
+
+Tutorial:
+
+(Esse tutorial está demonstrado de forma ilustrada no começo do jogo)
+
+Seu objetivo nesse jogo é atingir 100 pontos no seu total score, com o menor número de turnos possível.
+O seu total score é um número grande que aparecerá na parte superior da tela.
+O jogo possui 5 caixas onde cada uma delas possui um número aleatório de 0 a 9 em seu interior.
+Ao clicar numa caixa, seu número será adicionado ao total score e a caixa selecionada ficará então verde, tendo seu  valor alterado para 0.
+O jogador não poderá selecionar novas caivas enquanto uma caixa estiver verde.
+Para poder continuar jogando, o botão de Generate no centro da tela deverá ser tocado, assim, novas caixas serão geradas.
+A quantia de caixas novas a serem geradas é definida através do valor do slider.
+Caixas são geradas da esquerda para a direita.
+Entretanto, o número de caixas a serem geradas é descontado do total score a cada turno.
+Por exemplo, caso seu total score seja 8 e você gere 2 novas caixas, seu total score passará a ser 6.
