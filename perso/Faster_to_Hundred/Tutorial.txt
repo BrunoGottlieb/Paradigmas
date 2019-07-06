@@ -12,7 +12,8 @@ Classes
 Requisitos:
 
 Android 4.1 ou superior
-Link para download do apk(Google Drive): https://drive.google.com/open?id=1gZIQtxniyibIh16BQk8rg5YTuNYDGYZc
+Link para download do apk(Android): https://drive.google.com/open?id=1gZIQtxniyibIh16BQk8rg5YTuNYDGYZc
+Link para download do projeto para Unity: https://drive.google.com/open?id=1geCCzCxe8DF_BunqvxSI4lY7hm8-5-pC
 
 Tutorial:
 
