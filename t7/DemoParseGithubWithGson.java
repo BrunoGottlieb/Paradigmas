@@ -46,7 +46,7 @@ public class DemoParseGithubWithGson extends Thread {
 		try {
 			while(proceed) {
 				System.out.println("url a ser requisitada: " + a.concat("?page=" + index.toString()));
-				gitHubWithGson(a.concat("?page=" + index.toString()));
+				gitHubWithGson(a, index);
 				index++;
 				System.out.println("Valor do index: " + index);
 			}
@@ -59,9 +59,9 @@ public class DemoParseGithubWithGson extends Thread {
 		}
 	}
 
-	public static void gitHubWithGson(String urlRecebida) throws IOException {
+	public static void gitHubWithGson(String urlRecebida, Integer index) throws IOException {
 
-		String urlstr = urlRecebida;
+		String urlstr = urlRecebida.concat("?page=" + index.toString());
 
 		URL url = new URL(urlstr);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -94,7 +94,7 @@ public class DemoParseGithubWithGson extends Thread {
 				numCommits++;
 				tamMedioMensagens += message.toString().length();
 				
-				compareDate(date, urlstr);
+				compareDate(date, urlRecebida);
 
 			}   
 
@@ -103,8 +103,8 @@ public class DemoParseGithubWithGson extends Thread {
 		} else {
 			
 			proceed = false;
-			GitHubAnalyzerGUI.data.add(new TableData(urlstr, numCommits.toString(), ((Integer)(tamMedioMensagens/numCommits)).toString()));
-			conferirRecordes(numCommits, urlstr);
+			GitHubAnalyzerGUI.data.add(new TableData(urlRecebida, numCommits.toString(), ((Integer)(tamMedioMensagens/numCommits)).toString()));
+			conferirRecordes(numCommits, urlRecebida);
 			
 			tamMedioMensagens = 0;
 			numCommits = 0;
