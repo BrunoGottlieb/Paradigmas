@@ -29,8 +29,6 @@ public class GitHubAnalyzerGUI extends Application {
 	
 	public static ArrayList<String> urlList = new ArrayList<String>();
 	
-	//ListView<String> listView;
-	
 	TableView<TableData> table;
 	
 	public static ObservableList<TableData> data =
@@ -47,7 +45,6 @@ public class GitHubAnalyzerGUI extends Application {
 
 		// --------------------------------------- tabela
 		
-		//listView = new ListView<>();
 		table = new TableView<>();
 		
 		TableColumn<TableData, String> repositorioColumn = new TableColumn<>("Repositorio");
@@ -153,7 +150,9 @@ public class GitHubAnalyzerGUI extends Application {
 				Label aboutText = new Label("Maior numero de commits: " + DemoParseGithubWithGson.maiorRepos +
 						                    "   [" + DemoParseGithubWithGson.maiorNumCommits + " commits] " +
 						                    "\nMenor numero de commits: " + DemoParseGithubWithGson.menorRepos +
-						                    "   [" + DemoParseGithubWithGson.menorNumCommits + " commits]");
+						                    "   [" + DemoParseGithubWithGson.menorNumCommits + " commits]" +
+						                    "\nRepositorio com commit mais recente: " + DemoParseGithubWithGson.reposMaisRecente +
+						                    "\nRepositorio com commit mais antigo: " + DemoParseGithubWithGson.reposMaisAntigo);
 				
 				StackPane aboutLayout = new StackPane();
 				aboutLayout.getChildren().add(aboutText);
@@ -173,8 +172,6 @@ public class GitHubAnalyzerGUI extends Application {
 	}
 
 	public static void main(String[] args) {
-		//DemoParseGithubWithGson d = new DemoParseGithubWithGson();
-		//d.start();
 		launch(args);
 	}
 }

@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,6 +21,21 @@ public class DemoParseGithubWithGson extends Thread {
 	public static String maiorRepos;
 	public static int menorNumCommits = 999;
 	public static String menorRepos;
+	
+	private static Integer tamMedioMensagens = 0;
+	private static Integer numCommits = 0;
+	
+	public static String dataMaisRecente = "0000-00-00";
+	public static String horarioDaDataMaisRecente = "00:00:00";
+	public static String reposMaisRecente;
+	
+	public static String dataMaisAntiga = "9999-99-99";
+	public static String horarioDaDataMaisAntiga = "99:99:99";
+	public static String reposMaisAntigo;
+	
+	private static boolean proceed = true;
+	
+	private Integer index = 0;
 
 	public void start(String s) {
 		run(s);
@@ -26,7 +44,15 @@ public class DemoParseGithubWithGson extends Thread {
 	public void run(String a){
 		System.out.println("Github Getter running");
 		try {
-			gitHubWithGson(a);		
+			while(proceed) {
+				System.out.println("url a ser requisitada: " + a.concat("?page=" + index.toString()));
+				gitHubWithGson(a.concat("?page=" + index.toString()));
+				index++;
+				System.out.println("Valor do index: " + index);
+			}
+			index = 0;
+			proceed = true;
+				
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Thread nao pode iniciar");
@@ -46,48 +72,45 @@ public class DemoParseGithubWithGson extends Thread {
 		BufferedReader in = new BufferedReader(
 				new InputStreamReader(con.getInputStream()));
 
-		// Response header (includes pagination links)
-		System.out.println(con.getHeaderFields().get("Link").get(0));
-
-		// Parse a nested JSON response using Gson
 		JsonParser parser = new JsonParser();
 		JsonArray results = parser.parse(in.readLine()).getAsJsonArray();
-		System.out.println("Size: "+ results.size());
-
-		JsonElement date = null;
-		JsonElement message = null;
-
-		Integer tamMedioMensagens = 0;
-		Integer numCommits = 0;
-
-		ArrayList<CommitData> tmp = new ArrayList<>();
-
-		for (JsonElement e : results) {
-			date = e
-					.getAsJsonObject().get("commit")
-					.getAsJsonObject().get("author")
-					.getAsJsonObject().get("date");
-
-			message = e
-					.getAsJsonObject().get("commit")
-					.getAsJsonObject().get("message");
-
-			CommitData c = new CommitData(date, message);
-
-			numCommits++;
-			tamMedioMensagens += message.toString().length();
-
-			tmp.add(c);
-
-			System.out.println("Data: " + date);
-			System.out.println("Message: " + message);
-		}   
-
-		GitHubAnalyzerGUI.data.add(new TableData(urlstr, numCommits.toString(), ((Integer)(tamMedioMensagens/numCommits)).toString()));
-		conferirRecordes(numCommits, urlstr);
+		System.out.println("Size: "+ results.size()+"\n");
 		
-		System.out.println("Everything was ok.");
-		in.close();
+		if(results.size() > 0) {
+			
+			String date = null;
+			JsonElement message = null;
+
+			for (JsonElement e : results) {
+				date = e
+						.getAsJsonObject().get("commit")
+						.getAsJsonObject().get("author")
+						.getAsJsonObject().get("date").getAsString();
+
+				message = e
+						.getAsJsonObject().get("commit")
+						.getAsJsonObject().get("message");
+
+				numCommits++;
+				tamMedioMensagens += message.toString().length();
+				
+				compareDate(date, urlstr);
+
+			}   
+
+			in.close();
+			
+		} else {
+			
+			proceed = false;
+			GitHubAnalyzerGUI.data.add(new TableData(urlstr, numCommits.toString(), ((Integer)(tamMedioMensagens/numCommits)).toString()));
+			conferirRecordes(numCommits, urlstr);
+			
+			tamMedioMensagens = 0;
+			numCommits = 0;
+			
+		}
+		
 	}
 	
 	public static void conferirRecordes(int n, String s) {
@@ -101,15 +124,57 @@ public class DemoParseGithubWithGson extends Thread {
 		}
 			
 	}
-
-}
-
-class CommitData {
-	private JsonElement date;
-	private JsonElement message;
-
-	public CommitData(JsonElement date, JsonElement message) {
-		this.date = date;
-		this.message = message;		
+	
+	private static void compareDate(String date, String urlstr) {
+		String originalCopia = date;
+		String apenasData = date.substring(0, 10);
+		String apenasHorario = date.substring(11, 19);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date date1 = sdf.parse(apenasData);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			System.out.println("Problema com a data");
+		}
+		
+		// -------------------------------------------------Comparar recente
+		if (apenasData.compareTo(dataMaisRecente) > 0) {
+            dataMaisRecente = apenasData;
+            horarioDaDataMaisRecente = apenasHorario;
+            reposMaisRecente = urlstr;
+        } else if (apenasData.compareTo(dataMaisRecente) == 0) {
+        	compareTime(apenasHorario, urlstr, apenasData, 1);
+        } else {
+            System.out.println("A data nao foi comparada.");
+        }
+		
+		// -------------------------------------------------Comparar antiga
+		if (apenasData.compareTo(dataMaisAntiga) < 0) {
+            dataMaisAntiga = apenasData;
+            horarioDaDataMaisAntiga = apenasHorario;
+            reposMaisAntigo = urlstr;
+        } else if (apenasData.compareTo(dataMaisAntiga) == 0) {
+        	compareTime(apenasHorario, urlstr, apenasData, 0);
+        } else {
+            System.out.println("A data nao foi comparada.");
+        }
 	}
+	
+	private static void compareTime(String time, String urlstr, String data, int condicao) {
+		if (condicao == 1 && time.compareTo(horarioDaDataMaisRecente) > 0) {
+            System.out.println("Date1 is after Date2");
+            dataMaisRecente = data;
+            reposMaisRecente = urlstr;
+            horarioDaDataMaisRecente = time;
+		}
+		
+		if (condicao == 0 && time.compareTo(horarioDaDataMaisAntiga) < 0) {
+            System.out.println("Date1 is after Date2");
+            dataMaisAntiga = data;
+            reposMaisAntigo = urlstr;
+            horarioDaDataMaisAntiga = time;
+		}
+	}
+
 }
