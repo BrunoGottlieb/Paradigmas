@@ -1,2 +1,0 @@
-https://api.github.com/repos/BrunoGottlieb/Paradigmas/commits
-https://api.github.com/repos/GlaucioSales/paradigmas-2019/commits
