@@ -139,20 +139,21 @@ public class GitHubAnalyzerGUI extends Application {
 		
 		subMenuTools.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				GithubWithGson.guiOrCmd = 0;
 				table.getItems().clear();
 				System.out.println("Enviando repositorios para a thread");
 				
 				for (String s : urlList) {
-					GithubWithGsonGUI d = new GithubWithGsonGUI();
+					GithubWithGson d = new GithubWithGson();
 					d.start(s);
 				}
 				
-				Label aboutText = new Label("Maior numero de commits: " + GithubWithGsonGUI.maiorRepos +
-						                    "   [" + GithubWithGsonGUI.maiorNumCommits + " commits] " +
-						                    "\nMenor numero de commits: " + GithubWithGsonGUI.menorRepos +
-						                    "   [" + GithubWithGsonGUI.menorNumCommits + " commits]" +
-						                    "\nRepositorio com commit mais recente: " + GithubWithGsonGUI.reposMaisRecente +
-						                    "\nRepositorio com commit mais antigo: " + GithubWithGsonGUI.reposMaisAntigo);
+				Label aboutText = new Label("Maior numero de commits: " + GithubWithGson.maiorRepos +
+						                    "   [" + GithubWithGson.maiorNumCommits + " commits] " +
+						                    "\nMenor numero de commits: " + GithubWithGson.menorRepos +
+						                    "   [" + GithubWithGson.menorNumCommits + " commits]" +
+						                    "\nRepositorio com commit mais recente: " + GithubWithGson.reposMaisRecente +
+						                    "\nRepositorio com commit mais antigo: " + GithubWithGson.reposMaisAntigo);
 				
 				StackPane aboutLayout = new StackPane();
 				aboutLayout.getChildren().add(aboutText);
