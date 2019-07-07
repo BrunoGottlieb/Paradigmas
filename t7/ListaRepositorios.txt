@@ -1,2 +1,0 @@
-https://api.github.com/repositories/32538871/commits?page=2
-https://api.github.com/repositories/32538871/commits?page=49
