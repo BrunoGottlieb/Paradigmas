@@ -1,0 +1,1 @@
+Formato de entrada para os repositorios: https://api.github.com/repos/BrunoGottlieb/Paradigmas/commits
